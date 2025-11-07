@@ -1,0 +1,25 @@
+From 5a83cea4aed166c867839d866baaad34be090a5b Mon Sep 17 00:00:00 2001
+From: Kazuki H <kazukih0205@gmail.com>
+Date: Sun, 5 May 2024 06:10:59 +0900
+Subject: [PATCH] Don't fill background emoji
+
+---
+ Telegram/SourceFiles/history/view/history_view_reply.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Telegram/SourceFiles/history/view/history_view_reply.cpp b/Telegram/SourceFiles/history/view/history_view_reply.cpp
+index 1b9df5d..4deea79 100644
+--- a/Telegram/SourceFiles/history/view/history_view_reply.cpp
++++ b/Telegram/SourceFiles/history/view/history_view_reply.cpp
+@@ -642,7 +642,7 @@ void Reply::paint(
+ 	}
+ 	Ui::Text::ValidateQuotePaintCache(*cache, quoteSt);
+ 	Ui::Text::FillQuotePaint(p, rect, *cache, quoteSt);
+-	if (backgroundEmojiData) {
++	if (0 && backgroundEmojiData) {
+ 		ValidateBackgroundEmoji(
+ 			backgroundEmojiId,
+ 			backgroundEmojiData,
+-- 
+2.45.0
+

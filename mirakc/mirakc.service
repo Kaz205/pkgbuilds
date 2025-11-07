@@ -1,0 +1,12 @@
+[Unit]
+Description=mirakc
+
+[Service]
+ExecStart=/bin/bash -c "while [ ! -e /dev/isdb6014video3 ]; do sleep 1; done && mirakc -c /etc/mirakc/config.yml"
+Restart=always
+Type=exec
+CPUSchedulingPolicy=fifo
+OOMScoreAdjust=-15
+
+[Install]
+WantedBy=multi-user.target

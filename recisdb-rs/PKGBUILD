@@ -1,0 +1,22 @@
+pkgbase=recisdb-rs
+pkgname=('recisdb-rs')
+pkgver=1.2.2
+pkgrel=1
+arch=('any')
+makedepends=('cmake' 'clang' 'rust' 'pkg-config')
+source=(git+https://github.com/kazuki0824/recisdb-rs?#tag=$pkgver)
+sha256sums=('SKIP')
+build() {
+    cd "$pkgname"
+
+    git submodule init && git submodule update --depth=1
+    cargo build -F dvb --release
+}
+
+package() {
+    cd $pkgdir
+
+    mkdir -p usr/bin
+
+    cp $srcdir/$pkgname/target/release/recisdb usr/bin/recisdb
+}

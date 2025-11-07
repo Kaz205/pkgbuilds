@@ -1,0 +1,25 @@
+From 004b03d4a34a06276d5708ed58d07887e08517d6 Mon Sep 17 00:00:00 2001
+From: Kazuki H <kazukih0205@gmail.com>
+Date: Sat, 13 Sep 2025 23:44:04 +0900
+Subject: [PATCH] Fix IP
+
+---
+ data/scripts/waydroid-net.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/scripts/waydroid-net.sh b/data/scripts/waydroid-net.sh
+index 3ce3910..e5735cb 100755
+--- a/data/scripts/waydroid-net.sh
++++ b/data/scripts/waydroid-net.sh
+@@ -20,7 +20,7 @@ LXC_BRIDGE_MAC="00:16:3e:00:00:01"
+ LXC_ADDR="192.168.240.1"
+ LXC_NETMASK="255.255.255.0"
+ LXC_NETWORK="192.168.240.0/24"
+-LXC_DHCP_RANGE="192.168.240.2,192.168.240.254"
++LXC_DHCP_RANGE="192.168.240.2,192.168.240.2"
+ LXC_DHCP_MAX="253"
+ LXC_DHCP_CONFILE=""
+ LXC_DHCP_PING="true"
+-- 
+2.51.0
+

@@ -1,0 +1,27 @@
+From a1061ed4b3420d9b719e7d58be183167f999b3fb Mon Sep 17 00:00:00 2001
+From: Kazuki Hashimoto <kazukih0205@gmail.com>
+Date: Sun, 1 Dec 2024 06:19:26 +0900
+Subject: [PATCH] Disable auto-adb
+
+---
+ tools/helpers/lxc.py | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tools/helpers/lxc.py b/tools/helpers/lxc.py
+index c2ca4e7..95018bd 100644
+--- a/tools/helpers/lxc.py
++++ b/tools/helpers/lxc.py
+@@ -76,10 +76,6 @@ def generate_nodes_lxc_config(args):
+             raise OSError('Binder node "hwbinder" of host not found')
+         make_entry("/vendor", "vendor_extra", options="rbind,optional 0 0")
+ 
+-    # Necessary device nodes for adb
+-    make_entry("none", "dev/pts", "devpts", "defaults,mode=644,ptmxmode=666,create=dir 0 0", False)
+-    make_entry("/dev/uhid")
+-
+     # TUN/TAP device node for VPN
+     make_entry("/dev/net/tun", "dev/tun")
+ 
+-- 
+2.47.1
+

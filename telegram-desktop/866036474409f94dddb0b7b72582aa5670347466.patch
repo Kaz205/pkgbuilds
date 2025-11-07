@@ -1,0 +1,46 @@
+From 866036474409f94dddb0b7b72582aa5670347466 Mon Sep 17 00:00:00 2001
+From: kukuruzka <60149954+kukuruzka165@users.noreply.github.com>
+Date: Thu, 4 Jan 2024 17:31:13 +0200
+Subject: [PATCH] remove reply background in some places
+
+---
+ Telegram/SourceFiles/settings/settings_scale_preview.cpp   | 7 -------
+ .../SourceFiles/window/themes/window_theme_preview.cpp     | 7 -------
+ 2 files changed, 14 deletions(-)
+
+diff --git a/Telegram/SourceFiles/settings/settings_scale_preview.cpp b/Telegram/SourceFiles/settings/settings_scale_preview.cpp
+index f4983ca5362cb..2a24d76ea41f6 100644
+--- a/Telegram/SourceFiles/settings/settings_scale_preview.cpp
++++ b/Telegram/SourceFiles/settings/settings_scale_preview.cpp
+@@ -704,13 +704,6 @@ void Preview::paintReply(Painter &p, QRect clip) {
+ 			outline,
+ 			_replyRect.height());
+ 		p.drawRoundedRect(_replyRect, radius, radius);
+-		p.setOpacity(Ui::kDefaultBgOpacity);
+-		p.setClipRect(
+-			_replyRect.x() + outline,
+-			_replyRect.y(),
+-			_replyRect.width() - outline,
+-			_replyRect.height());
+-		p.drawRoundedRect(_replyRect, radius, radius);
+ 	}
+ 	p.setOpacity(1.);
+ 	p.setClipping(false);
+diff --git a/Telegram/SourceFiles/window/themes/window_theme_preview.cpp b/Telegram/SourceFiles/window/themes/window_theme_preview.cpp
+index 63003e0474da7..fe95185d06be9 100644
+--- a/Telegram/SourceFiles/window/themes/window_theme_preview.cpp
++++ b/Telegram/SourceFiles/window/themes/window_theme_preview.cpp
+@@ -880,13 +880,6 @@ void Generator::paintBubble(const Bubble &bubble) {
+ 			_p->setOpacity(Ui::kDefaultOutline1Opacity);
+ 			_p->setClipRect(rbar.x(), rbar.y(), outline, rbar.height());
+ 			_p->drawRoundedRect(rbar, radius, radius);
+-			_p->setOpacity(Ui::kDefaultBgOpacity);
+-			_p->setClipRect(
+-				rbar.x() + outline,
+-				rbar.y(),
+-				rbar.width() - outline,
+-				rbar.height());
+-			_p->drawRoundedRect(rbar, radius, radius);
+ 		}
+ 		_p->setOpacity(1.);
+ 		_p->setClipping(false);

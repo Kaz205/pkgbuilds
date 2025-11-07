@@ -1,0 +1,35 @@
+pkgbase=mirakc
+pkgname=('mirakc')
+pkgver=3.4.27
+pkgrel=1
+arch=('any')
+source=(
+    https://github.com/mirakc/mirakc/archive/refs/tags/$pkgver.zip
+    config.yml
+    mirakc.service
+    mirakc-set-unix-socket-perms.service
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+build() {
+    cd "$pkgname-$pkgver"
+
+    cargo build --release
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+
+    # Empty folder for storing epgs
+    mkdir -p "$pkgdir/var/lib/mirakc/epg"
+
+    install -Dm0755 target/release/mirakc target/release/mirakc-timeshift-fs -t "$pkgdir/usr/bin/"
+    install -Dm0644 resources/strings.yml ../config.yml -t "$pkgdir/etc/mirakc/"
+    install -Dm0644 ../mirakc.service -t "$pkgdir/etc/systemd/system/"
+    install -Dm0644 ../mirakc-set-unix-socket-perms.service -t "$pkgdir/etc/systemd/system/"
+}
+

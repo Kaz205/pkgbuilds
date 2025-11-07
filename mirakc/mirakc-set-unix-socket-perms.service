@@ -1,0 +1,11 @@
+[Unit]
+Description=mirakc-set-unix-socket-perms
+Wants=mirakc.service
+After=mirakc.service
+
+[Service]
+ExecStart=/bin/bash -c "sleep 5 && chmod 777 /var/run/mirakc.sock"
+Type=exec
+
+[Install]
+WantedBy=multi-user.target

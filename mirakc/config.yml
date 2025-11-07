@@ -1,0 +1,82 @@
+server:
+  addrs:
+    - http: '0.0.0.0:40772'
+    - unix: /var/run/mirakc.sock
+epg:
+  cache-dir: /var/lib/mirakc/epg
+channels:
+  - name: TOKYO MX
+    type: GR
+    channel: T16
+    disabled: false
+  - name: tvk
+    type: GR
+    channel: T17
+    disabled: false
+  - name: フジテレビジョン
+    type: GR
+    channel: T21
+    disabled: false
+  - name: TBS
+    type: GR
+    channel: T22
+    disabled: false
+  - name: テレビ東京
+    type: GR
+    channel: T23
+    disabled: false
+  - name: テレビ朝日
+    type: GR
+    channel: T24
+    disabled: false
+  - name: 日本テレビ
+    type: GR
+    channel: T25
+    disabled: false
+  - name: NHKEテレ東京
+    type: GR
+    channel: T26
+    disabled: false
+  - name: NHK総合・東京
+    type: GR
+    channel: T27
+    disabled: false
+tuners:
+  - name: 'e-better DTV02A-4TS-P #1'
+    types:
+      - GR
+      - BS
+      - CS
+    command: recisdb tune --device /dev/isdb6014video0 --channel {{{channel}}} -
+    disabled: false
+  - name: 'e-better DTV02A-4TS-P #2'
+    types:
+      - GR
+      - BS
+      - CS
+    command: recisdb tune --device /dev/isdb6014video1 --channel {{{channel}}} -
+    disabled: false
+  - name: 'e-better DTV02A-4TS-P #3'
+    types:
+      - GR
+      - BS
+      - CS
+    command: recisdb tune --device /dev/isdb6014video2 --channel {{{channel}}} -
+    disabled: false
+  - name: 'e-better DTV02A-4TS-P #4'
+    types:
+      - GR
+      - BS
+      - CS
+    command: recisdb tune --device /dev/isdb6014video3 --channel {{{channel}}} -
+    disabled: false
+
+filters:
+  # Optionally, you can specify a command to process TS packets before sending
+  # them to a client.
+  #
+  # The following command processes TS packets on a remote server listening on
+  # TCP port 40774.
+  decode-filter:
+    command: >-
+      arib-b25-stream-test

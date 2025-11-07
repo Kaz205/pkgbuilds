@@ -1,0 +1,22 @@
+From 6636c04f610882dec982bc3dbea69f45a5caf144 Mon Sep 17 00:00:00 2001
+From: KUKURUZKA <60149954+KUKURUZKA165@users.noreply.github.com>
+Date: Wed, 8 Nov 2023 19:50:21 +0200
+Subject: [PATCH] zero reply bg opacity
+
+---
+ Telegram/SourceFiles/ui/chat/chat_style.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Telegram/SourceFiles/ui/chat/chat_style.h b/Telegram/SourceFiles/ui/chat/chat_style.h
+index 39f5a76e448a2..59a0b80342262 100644
+--- a/Telegram/SourceFiles/ui/chat/chat_style.h
++++ b/Telegram/SourceFiles/ui/chat/chat_style.h
+@@ -35,7 +35,7 @@ inline constexpr auto kColorPatternsCount = Text::kMaxQuoteOutlines;
+ inline constexpr auto kColorIndexCount = uint8(1 << 6);
+ inline constexpr auto kSimpleColorIndexCount = uint8(7);
+ 
+-inline constexpr auto kDefaultBgOpacity = 0.12;
++inline constexpr auto kDefaultBgOpacity = 0;
+ inline constexpr auto kDefaultOutline1Opacity = 0.9;
+ inline constexpr auto kDefaultOutline2Opacity = 0.3;
+ inline constexpr auto kDefaultOutline3Opacity = 0.6;
