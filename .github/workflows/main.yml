@@ -1,0 +1,116 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build_packages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: true
+
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - uses: actions/checkout@v4
+
+      - name: Build packages
+        uses: docker://archlinux/archlinux:base-devel
+        with:
+          args: |
+            /bin/bash -c "mkdir -vp /startdir && \
+            cp -Rv . /startdir && \
+            pacman -q --noconfirm -Syu expect git bc cpio pahole python wget && \
+            rm -rf /var/cache/pacman/pkg/* && \
+            ln -sf /usr/share/zoneinfo/UTC /etc/localtime && \
+            useradd -g users -m builduser && \
+            echo 'builduser ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers && \
+            mkdir -vp /build /logdest /github/workspace/package_files && \
+            chown -R builduser /startdir /build /logdest /github/workspace/package_files && \
+            sudo -u builduser git config --global http.postBuffer 536870912 && \
+            cd /startdir && \
+            for dir in */; do (cd $dir && sudo -u builduser makepkg -s --noconfirm --needed --config /startdir/makepkg.conf); done"
+
+      - name: Upload packages as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          #  /home/runner/work/pkg/pkg/package_files
+          path: ./package_files
+
+  prepare_release:
+    runs-on: ubuntu-latest
+    needs: [build_packages]
+    steps:
+      - name: Prepare Arch specific binaries for use
+        run: |
+          mkdir -v /tmp/boots
+          echo "Downloading archlinux-bootstrap-x86_64.tar.zst"
+          curl -LO "https://geo.mirror.pkgbuild.com/iso/latest/archlinux-bootstrap-x86_64.tar.zst"
+          sudo tar xf archlinux-bootstrap-x86_64.tar.zst -C /tmp/boots --strip-components 1
+          mkdir -v /tmp/boots/repo
+
+      - name: Get the packages from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: /tmp/boots/repo
+
+      - name: Create package repository files
+        run: |
+          sudo /tmp/boots/usr/bin/arch-chroot /tmp/boots /bin/bash -c \
+            'repo-add /repo/custom-packages.db.tar.xz /repo/*'
+
+      - name: Upload the ready repository as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Custom pacman repository
+          path: /tmp/boots/repo
+
+  release:
+    runs-on: ubuntu-latest
+    needs: prepare_release
+    steps:
+      - name: Get packages from build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Custom pacman repository
+          path: release
+
+      # Like https://github.com/ame-yu/action-delete-latest-release
+      - name: Remove old release
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo
+            const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+            await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
+
+
+      - name: Release all packages
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ArchLinux-packages
+          files: release/*
+          body: |
+            Latest commit:
+            ```
+            ${{ github.event.head_commit.message }}
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
