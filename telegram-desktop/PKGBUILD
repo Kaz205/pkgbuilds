@@ -2,7 +2,7 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop
-pkgver=6.2.6
+pkgver=6.3.4
 pkgrel=1
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')
