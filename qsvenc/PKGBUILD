@@ -1,0 +1,25 @@
+pkgname=QSVEnc
+pkgver=8.04
+pkgrel=1
+pkgdesc="qsvenc"
+arch=('any')
+url='https://github.com/rigaya/QSVEnc'
+license=('MIT')
+makedepends=('cargo' 'cargo-c' 'rust' 'intel-compute-runtime' 'intel-gmmlib' 'intel-gpu-tools' 'intel-graphics-compiler' 'intel-media-driver' 'vpl-gpu-rt' 'cmake' 'ffmpeg4.4' 'ffmpeg' 'opencl-headers')
+optdepends=('vapoursynth')
+source=("git+https://github.com/rigaya/QSVEnc#tag=$pkgver")
+sha256sums=('SKIP')
+
+build() {
+	cd $pkgname
+
+	git submodule init && git submodule update --depth=1
+	./configure --enable-lto
+	make
+}
+package() {
+	cd $pkgname
+
+	install -Dm0755 ./qsvencc -t "$pkgdir/usr/bin"
+}
+
