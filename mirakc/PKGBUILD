@@ -1,6 +1,6 @@
 pkgbase=mirakc
 pkgname=('mirakc')
-pkgver=3.4.27
+pkgver=3.4.53
 pkgrel=1
 arch=('any')
 source=(
